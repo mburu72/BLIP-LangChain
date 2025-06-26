@@ -5,7 +5,7 @@ from router import endpoints
 
 app = FastAPI()
 
-app.include_router(endpoints.router)
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -14,3 +14,4 @@ app.add_middleware(
     allow_methods=["*"],  # or ["POST"] if you only use POST
     allow_headers=["*"],
 )
+app.include_router(endpoints.router)
