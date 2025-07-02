@@ -4,7 +4,7 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_core.vectorstores import InMemoryVectorStore
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from core.settings import settings
+from config.settings import settings
 
 embed_model = GoogleGenerativeAIEmbeddings(model='models/embedding-001', google_api_key=settings.G_A_K)
 logging.basicConfig(level=logging.INFO)

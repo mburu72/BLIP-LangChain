@@ -4,7 +4,7 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder, Syst
     HumanMessagePromptTemplate
 from langchain_core.runnables import RunnableWithMessageHistory, RunnableConfig
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
-from core.settings import settings
+from config.settings import settings
 import logging
 from docs_processing.docsops import load_docs, split_embed
 
@@ -49,7 +49,7 @@ chat_model = RunnableWithMessageHistory(chain, get_memory, input_messages_key='q
                                         history_messages_key='history')
 
 try:
-    documents = load_docs('uploaded_docs/')
+    documents = load_docs('compliance_docs/Kenya/')
     if not documents:
         logger.warning("No documents loaded.")
     ops = split_embed(documents)
