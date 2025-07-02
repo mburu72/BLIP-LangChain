@@ -3,7 +3,8 @@ import shutil
 from fastapi import File, UploadFile, APIRouter, Header
 from pydantic import BaseModel
 
-from agent_service import State, retrieve, generate
+from docs_processing.docsops import split_embed
+from llm_service.agent_service import State, retrieve, generate
 
 router = APIRouter()
 UPLOAD_DIR = 'uploaded_docs'
@@ -17,7 +18,9 @@ async def upload_files(file: UploadFile = File(...)):
     file_path = os.path.join(UPLOAD_DIR, file.filename)
     with open(file_path, 'wb') as buffer:
         shutil.copyfileobj(file.file, buffer)
+        split_embed(file)
         return {'filename': file.filename, 'status': 'uploaded'}
+
 
 @router.post("/ask")
 async def ask_question(query: Query, session_id: str = Header(None, alias="X-Session-Id")):

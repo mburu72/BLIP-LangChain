@@ -9,9 +9,9 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://edwardmn.netlify.app"],  # You can restrict this to ["http://localhost:3000"] in production
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # or ["POST"] if you only use POST
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 app.include_router(endpoints.router)
