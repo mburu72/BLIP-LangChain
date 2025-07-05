@@ -1,5 +1,4 @@
 from typing import TypedDict
-from langchain_core.chat_history import InMemoryChatMessageHistory
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder, SystemMessagePromptTemplate, \
     HumanMessagePromptTemplate
 from langchain_core.runnables import RunnableWithMessageHistory, RunnableConfig
@@ -7,16 +6,10 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGener
 from config.settings import settings
 import logging
 from docs_processing.docsops import load_docs, split_embed
+from utils.functions import load_prompt, get_memory
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-session_store = {}
-vector_s = None
-def get_memory(session_id: str):
-    if session_id not in session_store:
-        session_store[session_id] = InMemoryChatMessageHistory()
-    return session_store[session_id]
 
 try:
     model = ChatGoogleGenerativeAI(
@@ -32,10 +25,7 @@ except Exception as e:
     logger.error(f"Failed to initialize models: {e}")
     raise SystemExit("Critical: Could not initialize LLM or embeddings.")
 
-def load_prompt(path_to_prompt: str) -> str:
-    with open (path_to_prompt, 'r', encoding='utf-8') as f:
-        docs = f.read()
-        return docs
+
 sys_prompt = load_prompt('prompt.txt')
 
 
@@ -79,7 +69,6 @@ def retrieve(state: State):
     question = query_preprocessing(llm=model, question=state['question'])
     logger.info(question.content)
     try:
-        retriever = vector_s.as_retriever()
         docs = vector_s.similarity_search(question.content)
 
         return {
