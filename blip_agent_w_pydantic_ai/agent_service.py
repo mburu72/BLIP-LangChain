@@ -37,7 +37,8 @@ blip_agent = Agent(model = model, deps_type=Deps, retries=2, result_type=str, sy
 
 async def run_agent(query: str):
     try:
-        result = blip_agent.run(query)
+        result = await blip_agent.run(query)
+        logger.info(result)
         return result
     except Exception as e:
         logger.warning(e)

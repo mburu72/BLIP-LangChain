@@ -41,14 +41,17 @@ async def ask_question(query: Query, session_id: str = Header(None, alias="X-Ses
     return {"answer": state['answer']}
 
 @router.post('/ask-agent')
-async def ask_agent(question: str, session_id: str = Header(None, alias="X-Session-Id")):
+async def ask_agent(query: Query, session_id: str = Header(None, alias="X-Session-Id")):
     deps: agent_service.Deps = {
         'session_id': session_id,
-        'question': question,
+        'question': query.question,
         'context': [],
         'answer': ''
     }
-    response = await run_agent(question)
+    logger.info(deps)
+    response = await run_agent(query.question)
+    logger.info(f"RESP: {response}")
+    logger.info(f'SENT: {response.output}')
     return response.output
 
 

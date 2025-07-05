@@ -26,7 +26,7 @@ except Exception as e:
     raise SystemExit("Critical: Could not initialize LLM or embeddings.")
 
 
-sys_prompt = load_prompt('prompt.txt')
+sys_prompt = load_prompt('prompt.md')
 
 
 prompt = ChatPromptTemplate.from_messages([
